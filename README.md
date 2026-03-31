@@ -25,11 +25,13 @@ mkdir -p /lib/modules/$(uname -r)/build
 
 mkdir -p bf-sde-dev-9.13.4/opt/bf-sde
 cp -r install cmake p4studio run_*.sh bf-sde-dev-9.13.4/opt/bf-sde/
-find bf-sde-dev-9.13.4/opt/bf-sde/lib -name "*.so*" -exec strip --strip-unneeded {} +
-find bf-sde-dev-9.13.4/opt/bf-sde/bin -type f -exec strip --strip-unneeded {} +
+find bf-sde-dev-9.13.4/opt/bf-sde/install/lib -name "*.so*" -exec strip --strip-unneeded {} +
+find bf-sde-dev-9.13.4/opt/bf-sde/install/bin -type f -exec strip --strip-unneeded {} +
 cp -r /root/bf-sde-builder/bf-sde-dev/* bf-sde-dev-9.13.4/
 dpkg-deb --build bf-sde-dev-9.13.4
 ```
+
+Copy the resulting `bf-sde-dev-9.13.4.deb` to install where you want to run your development environment (which must be a Debian11 based).
 
 ## 2 - Build bf-sde 9.13.4 for Tofino1
 
