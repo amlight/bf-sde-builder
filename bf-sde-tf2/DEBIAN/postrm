@@ -1,0 +1,7 @@
+#!/bin/sh
+set -e
+if [ "$1" = "remove" ]; then
+    rm -f /opt/bf-sde/install/bin/bf-p4c
+    rm -f /opt/bf-sde/install/bin/p4_build.sh
+    rm -f /opt/bf-sde/install/bin/run_pd_rpc.py
+fi

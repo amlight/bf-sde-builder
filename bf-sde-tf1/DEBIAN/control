@@ -1,0 +1,10 @@
+Package: bf-sde-dev
+Version: 9.13.4-1
+Architecture: amd64
+Maintainer: Italo Valcy <italo@amlight.net>
+Depends: openssh-server, g++, cmake, make, python3-dev, tmux, python3-thrift
+Description: Intel P4 Studio Software Development Environment (SDE)
+ Intel® P4 Studio Software Development Environment (SDE) is a set of packages
+ for programming Intel’s line of programmable Ethernet Switches. This package
+ contains scripts for building P4 programs and running SDE with Tofino Model
+ simulator.

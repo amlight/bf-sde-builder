@@ -1,0 +1,18 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+    configure)
+	ln -sf /opt/bf-sde/install/bin/p4c /opt/bf-sde/install/bin/bf-p4c
+	ln -sf /opt/bf-sde/tools/p4_build.sh /opt/bf-sde/install/bin/p4_build.sh
+	ln -sf /opt/bf-sde/tools/run_pd_rpc.py /opt/bf-sde/install/bin/run_pd_rpc.py
+        ;;
+    abort-upgrade|abort-remove|abort-deconfigure)
+        ;;
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+        ;;
+esac
+
+exit 0
