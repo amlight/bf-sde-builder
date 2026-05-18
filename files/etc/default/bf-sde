@@ -1,0 +1,12 @@
+# bf-sde setup environment variables
+
+test -z "$ARCH" && ARCH=tf1
+
+test -z "$BF_LOG_DIR" && BF_LOG_DIR=/var/log
+
+test -z "$BF_DEBUG" && MODEL_ARGS="$MODEL_ARGS -q -- --thread-per-pipe"
+
+test -z "$PORTS_FILE" && PORTS_FILE=/tmp/ports.json
+
+MODEL_ARGS="-p $P4_NAME --arch $ARCH --log-dir $BF_LOG_DIR -f $PORTS_FILE --use-pcie-veth $MODEL_ARGS"
+BF_ARGS="-p $P4_NAME --arch $ARCH $BF_ARGS"

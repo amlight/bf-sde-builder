@@ -27,7 +27,7 @@ docker build -t amlight/bf-sde:9.13.4 .
 
 Please refer to the "2. Using bf-sde with tofino-model" for how to use it.
 
-### 1.2. Build open-p4studio with tofino-model
+### 1.2. Build open-p4studio with tofino-model manually
 
 ```
 apt-get update
@@ -58,16 +58,58 @@ TODO
 
 TODO
 
-## Using bf-sde with tofino-model
+## 2. Using bf-sde with tofino-model
+
+Example using the new procedure:
+
+TODO
+
+Using the old procedure (this is outdated):
 
 To run bf-sde with tofino-model using Docker (after building the docker image), you can run the following command:
 
 ```
-docker run -it --rm amlight/bf-sde:9.13.4 bash
+docker run -it --rm --privileged amlight/bf-sde:9.13.4 bash
 ```
 
 After the command above, you will have a Bash interactive shell where you can build your P4 code, run your tests, etc. For example, the sequence below will ilustrate how to build a very simple P4 example and test it:
 
 ```
+curl -LO https://raw.githubusercontent.com/italovalcy/bf-p4-examples/refs/heads/main/tna_basic/tna_basic.p4
+p4_build.sh tna_basic.p4
+setup_ports.sh tf1 /tmp/ports.json
+tmux new-sess -d -s model run_tofino_model.sh -p tna_basic --arch tf1 -f /tmp/ports.json --log-dir /var/log --use-pcie-veth
+tmux new-sess -d -s driver run_switchd.sh -p tna_basic --arch tf1
+wait-tofino.sh
+
+# At this point, the switch should be ready to forward traffic. Let's test it:
+
+TODO: get from history
+
+   12  ip netns add h1
+   13  ip netns add h2
+   14  ip link set veth1 netns h1
+   15  ip link set veth2 netns h1
+   16  tail /var/log/model_20260401_205622.log
+   17  ip netns exec h1 ip link set up veth1
+   18  ip netns exec h2 ip link set up veth2
+   19  ip netns exec h1 ip link set veth2 netns 0
+   20  ip netns exec h1 ip link set veth2 netns 1
+   21  ip link set veth2 netns h2
+   22  ip netns exec h2 ip link set up veth2
+   23  tail /var/log/model_20260401_205622.log
+   24  grep PORT /var/log/model_20260401_205622.log
+   25  ip netns exec h1 ip addr add 10.0.0.1/24 dev veth1
+   26  ip netns exec h2 ip addr add 10.0.0.2/24 dev veth2
+   27  bfshell
+   28  ip netns exec h1 ping -c4 10.0.0.2
+   29  ip netns exec h1 ad show
+   30  ip netns exec h1 ip a s
+   31  tail /var/log/model_20260401_205622.log
+   32  ip netns exec h1 ping -c4 10.0.0.2 -s 1400
+   33  grep "Tx Pkt to port" /var/log/model_20260401_205622.log
+   34  grep "Tx Pkt to port" /var/log/model_*.log
 
 ```
+
+

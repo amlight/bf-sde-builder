@@ -91,7 +91,7 @@ fi
 
 # create ports file
 
-echo '{' >> $PORTS_FILE
+echo '{' > $PORTS_FILE
 echo '  "PortToIf": [' >> $PORTS_FILE
 #echo '  "PortToVeth": [' >> $PORTS_FILE
 PORT=0

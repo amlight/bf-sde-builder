@@ -24,16 +24,19 @@ COPY --from=builder /opt/bf-sde/cmake    /opt/bf-sde/cmake
 COPY --from=builder /opt/bf-sde/p4studio /opt/bf-sde/p4studio
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    g++ cmake make tmux socat lsof netcat tini tcpdump vim-tiny \
+    g++ cmake make tmux socat lsof netcat tini tcpdump vim supervisor \
     ethtool iputils-ping iproute2 procps curl jq sudo ca-certificates \
     libedit2 libexpat1 python3-dev python3-thrift python3-scapy \
+    python3-pyroute2 python3-requests python3-flask \
     python3-cryptography libcurl3-gnutls libusb-1.0-0 libjudydebian1 \
- && apt-get clean
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/* \
+ && ln -s /opt/bf-sde/install/bin/p4c /opt/bf-sde/install/bin/bf-p4c \
+ && ln -s /opt/bf-sde/install/bin/run_bfshell.sh /opt/bf-sde/run_bfshell.sh \
+ && ln -s /opt/bf-sde/install/bin/run_switchd.sh /opt/bf-sde/run_switchd.sh \
+ && ln -s /opt/bf-sde/install/bin/run_tofino_model.sh /opt/bf-sde/run_tofino_model.sh
 
-RUN ls /opt/bf-sde && ln -s /opt/bf-sde/install/bin/p4c /opt/bf-sde/install/bin/bf-p4c
-
-COPY docker-entrypoint.sh /docker-entrypoint.sh
-COPY tools/* /opt/bf-sde/install/bin/
+COPY files/ /
 
 ENV SDE=/opt/bf-sde
 ENV SDE_INSTALL=$SDE/install

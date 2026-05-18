@@ -1142,6 +1142,10 @@ def parse_args():
         help="Go into the interactive mode after executing the provided script. Ignored if no script is specified")
 
     parser.add_argument(
+        "--only-flask", action='store_true',
+        help="Only run flask and provide the API")
+
+    parser.add_argument(
         "-e", "--eval",
         type=str,
         help="""
@@ -1293,7 +1297,7 @@ def rc_load(c):
         logging.info("Skipping loading rc files")
 
 
-def try_start_flask():
+def try_start_flask(run_in_thread=True):
     global flask_thread
 
     if not flask_support:
@@ -1314,9 +1318,12 @@ def try_start_flask():
     def run_app():
         app.run(host='127.0.0.1', port=3000, debug=False, use_reloader=False)
     
-    flask_thread = threading.Thread(target=run_app)
-    flask_thread.daemon = True
-    flask_thread.start()
+    if run_in_thread:
+        flask_thread = threading.Thread(target=run_app)
+        flask_thread.daemon = True
+        flask_thread.start()
+    else:
+        run_app()
 
 
 def run_shell(script):
@@ -2471,6 +2478,8 @@ WARNING: You requested importing Scapy, but are not running as root.
         except Exception as e:
             print(e)
             exit(1)
+    elif args.only_flask:
+        try_start_flask(run_in_thread=False)
     else:
         try_start_flask()
         run_shell(args.script)
