@@ -22,7 +22,7 @@ def tc_apply(intf1, intf2):
     logging.info(f"apply TC to intf {intf1} -> {intf2}")
     return (
         cmd(f"tc qdisc add dev {intf1} ingress")
-        + cmd(f"tc filter add dev {intf1} parent ffff: protocol all u32 match u8 0 0 action mirred egress redirect dev {intf2}")
+        + cmd(f"tc filter add dev {intf1} parent ffff: protocol all matchall action mirred egress redirect dev {intf2}")
    )
 
 def is_tc_applied(intf1, intf2):
